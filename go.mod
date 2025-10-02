@@ -1,4 +1,4 @@
-module roq
+module github.com/1hehaq/roq
 
 go 1.21
 
