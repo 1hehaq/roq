@@ -1,0 +1,1104 @@
+services:
+  aws:
+    name: AWS
+    method: SDK
+    sdk_type: aws
+    service: sts
+    operation: GetCallerIdentity
+    requires_secret: true
+    secret_name: secret
+    response_fields:
+      - Account
+      - Arn
+    details_format: "account: {{.Account}}, arn: {{.Arn}}"
+
+  algolia:
+    name: Algolia
+    method: GET
+    url: https://{{.AppID}}.algolia.net/1/keys
+    headers:
+      X-Algolia-API-Key: "{{.Key}}"
+      X-Algolia-Application-Id: "{{.AppID}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  autopilot:
+    name: Autopilot
+    method: GET
+    url: https://api2.autopilothq.com/v1/account
+    headers:
+      autopilotapikey: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  bitbucket:
+    name: Bitbucket
+    method: GET
+    url: https://api.bitbucket.org/2.0/user
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - username
+      - display_name
+    details_format: "user: {{.username}}"
+    requires_secret: false
+
+  bitly:
+    name: Bitly
+    method: GET
+    url: https://api-ssl.bitly.com/v4/user
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - login
+      - name
+    details_format: "user: {{.login}}"
+    requires_secret: false
+
+  buildkite:
+    name: Buildkite
+    method: GET
+    url: https://api.buildkite.com/v2/user
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  circleci:
+    name: CircleCI
+    method: GET
+    url: https://circleci.com/api/v2/me
+    headers:
+      Circle-Token: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - login
+      - name
+    details_format: "user: {{.login}}"
+    requires_secret: false
+
+  clearbit:
+    name: Clearbit
+    method: GET
+    url: https://company.clearbit.com/v2/companies/find?domain=stripe.com
+    auth_type: basic
+    auth_user: "{{.Key}}"
+    auth_pass: ""
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  clerk:
+    name: Clerk
+    method: GET
+    url: https://api.clerk.com/v1/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - id
+      - first_name
+      - last_name
+    details_format: "user: {{.first_name}} {{.last_name}}"
+    requires_secret: false
+
+  digitalocean:
+    name: DigitalOcean
+    method: GET
+    url: https://api.digitalocean.com/v2/account
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - account.email
+      - account.uuid
+    details_format: "email: {{.account.email}}"
+    requires_secret: false
+
+  doppler:
+    name: Doppler
+    method: GET
+    url: https://api.doppler.com/v3/workplace
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - workplace.name
+      - workplace.id
+    details_format: "workplace: {{.workplace.name}}"
+    requires_secret: false
+
+  evolutionapi:
+    name: EvolutionAPI
+    method: GET
+    url: https://api.evolution-api.com/
+    headers:
+      apikey: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - version
+      - message
+    details_format: "version: {{.version}}"
+    requires_secret: false
+
+  eventbrite:
+    name: Eventbrite
+    method: GET
+    url: https://www.eventbriteapi.com/v3/users/me/
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - name
+      - email
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  github:
+    name: GitHub
+    method: GET
+    url: https://api.github.com/user
+    headers:
+      Authorization: "token {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - login
+      - name
+    details_format: "user: {{.login}}"
+    error_field: message
+    requires_secret: false
+
+  gitlab:
+    name: GitLab
+    method: GET
+    url: https://gitlab.com/api/v4/user
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - username
+      - name
+    details_format: "user: {{.username}}"
+    requires_secret: false
+
+  getresponse:
+    name: GetResponse
+    method: GET
+    url: https://api.getresponse.com/v3/accounts
+    headers:
+      X-Auth-Token: "api-key {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  googlecloud:
+    name: GoogleCloud
+    method: GET
+    url: https://cloudresourcemanager.googleapis.com/v1/projects
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  helpscout:
+    name: HelpScout
+    method: GET
+    url: https://api.helpscout.net/v2/users/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - firstName
+      - lastName
+    details_format: "user: {{.firstName}} {{.lastName}}"
+    requires_secret: false
+
+  honeycomb:
+    name: Honeycomb
+    method: GET
+    url: https://api.honeycomb.io/1/auth
+    headers:
+      X-Honeycomb-Team: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  hubspot:
+    name: HubSpot
+    method: GET
+    url: https://api.hubapi.com/oauth/v1/access-tokens/{{.Key}}
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - user
+      - hub_id
+    details_format: "user: {{.user}}"
+    requires_secret: false
+
+  huggingface:
+    name: HuggingFace
+    method: GET
+    url: https://huggingface.co/api/whoami-v2
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - name
+      - fullname
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  jfrog:
+    name: JFrog
+    method: GET
+    url: https://{{.Domain}}.jfrog.io/artifactory/api/system/ping
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    requires_secret: false
+
+  jira:
+    name: Jira
+    method: GET
+    url: https://api.atlassian.com/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - name
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  klaviyo:
+    name: Klaviyo
+    method: GET
+    url: https://a.klaviyo.com/api/accounts/
+    headers:
+      Authorization: "Klaviyo-API-Key {{.Key}}"
+      accept: "application/json"
+      revision: "2024-10-15"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  launchdarkly:
+    name: LaunchDarkly
+    method: GET
+    url: https://app.launchdarkly.com/api/v2/members/me
+    headers:
+      Authorization: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - firstName
+      - lastName
+    details_format: "user: {{.firstName}} {{.lastName}}"
+    requires_secret: false
+
+  madkudu:
+    name: MadKudu
+    method: GET
+    auth_type: basic
+    auth_user: "{{.Key}}"
+    auth_pass: ""
+    url: https://api.madkudu.com/v1/companies
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  mailchimp:
+    name: Mailchimp
+    method: GET
+    url: https://{{.DC}}.api.mailchimp.com/3.0/
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  mailerlite:
+    name: MailerLite
+    method: GET
+    url: https://connect.mailerlite.com/api/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.email
+      - data.name
+    details_format: "user: {{.data.name}}"
+    requires_secret: false
+
+  mailgun:
+    name: Mailgun
+    method: GET
+    auth_type: basic
+    auth_user: api
+    auth_pass: "{{.Key}}"
+    url: https://api.mailgun.net/v3/domains
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  mongodb:
+    name: MongoDB
+    method: GET
+    url: https://cloud.mongodb.com/api/atlas/v1.0/groups
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  nvidia:
+    name: NVIDIA
+    method: GET
+    url: https://api.ngc.nvidia.com/v2/org/nvidia/team/cloud-functions/users
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  notion:
+    name: Notion
+    method: GET
+    url: https://api.notion.com/v1/users/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      Notion-Version: "2022-06-28"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - name
+      - type
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  npm:
+    name: NPM
+    method: GET
+    url: https://registry.npmjs.org/-/whoami
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - username
+    details_format: "user: {{.username}}"
+    requires_secret: false
+
+  okta:
+    name: Okta
+    method: GET
+    url: https://{{.Domain}}.okta.com/api/v1/users/me
+    headers:
+      Authorization: "SSWS {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - profile.email
+      - profile.login
+    details_format: "user: {{.profile.login}}"
+    requires_secret: false
+
+  omnisend:
+    name: Omnisend
+    method: GET
+    url: https://api.omnisend.com/v3/accounts
+    headers:
+      X-API-KEY: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  openai:
+    name: OpenAI
+    method: GET
+    url: https://api.openai.com/v1/models
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  opsgenie:
+    name: OpsGenie
+    method: GET
+    url: https://api.opsgenie.com/v2/account
+    headers:
+      Authorization: "GenieKey {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.name
+    details_format: "account: {{.data.name}}"
+    requires_secret: false
+
+  pandadoc:
+    name: PandaDoc
+    method: GET
+    url: https://api.pandadoc.com/public/v1/members/current
+    headers:
+      Authorization: "API-Key {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - first_name
+      - last_name
+    details_format: "user: {{.first_name}} {{.last_name}}"
+    requires_secret: false
+
+  paypal:
+    name: PayPal
+    method: GET
+    url: https://api.paypal.com/v1/identity/oauth2/userinfo?schema=openid
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  paystack:
+    name: Paystack
+    method: GET
+    url: https://api.paystack.co/balance
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  pipedrive:
+    name: Pipedrive
+    method: GET
+    url: https://api.pipedrive.com/v1/users/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.name
+      - data.email
+    details_format: "user: {{.data.name}}"
+    requires_secret: false
+
+  posthog:
+    name: PostHog
+    method: GET
+    url: https://app.posthog.com/api/users/@me/
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - first_name
+    details_format: "user: {{.first_name}}"
+    requires_secret: false
+
+  postman:
+    name: Postman
+    method: GET
+    url: https://api.getpostman.com/me
+    headers:
+      X-Api-Key: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - user.username
+      - user.email
+    details_format: "user: {{.user.username}}"
+    requires_secret: false
+
+  postmark:
+    name: Postmark
+    method: GET
+    url: https://api.postmarkapp.com/server
+    headers:
+      X-Postmark-Server-Token: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - Name
+      - ID
+    details_format: "server: {{.Name}}"
+    requires_secret: false
+
+  pulumi:
+    name: Pulumi
+    method: GET
+    url: https://api.pulumi.com/api/user
+    headers:
+      Authorization: "token {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - githubLogin
+      - name
+    details_format: "user: {{.githubLogin}}"
+    requires_secret: false
+
+  pushbullet:
+    name: Pushbullet
+    method: GET
+    url: https://api.pushbullet.com/v2/users/me
+    headers:
+      Access-Token: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - name
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  rabbitmq:
+    name: RabbitMQ
+    method: GET
+    auth_type: basic
+    auth_user: "{{.Username}}"
+    auth_pass: "{{.Key}}"
+    url: https://{{.Host}}:15672/api/whoami
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - name
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  razorpay:
+    name: Razorpay
+    method: GET
+    auth_type: basic
+    auth_user: "{{.Key}}"
+    auth_pass: "{{.Secret}}"
+    url: https://api.razorpay.com/v1/payments
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: true
+    secret_name: secret
+
+  recharge:
+    name: Recharge
+    method: GET
+    url: https://api.rechargeapps.com/shop
+    headers:
+      X-Recharge-Access-Token: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - shop.name
+      - shop.email
+    details_format: "shop: {{.shop.name}}"
+    requires_secret: false
+
+  sendgrid:
+    name: SendGrid
+    method: GET
+    url: https://api.sendgrid.com/v3/scopes
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  sendinblue:
+    name: SendinBlue
+    method: GET
+    url: https://api.sendinblue.com/v3/account
+    headers:
+      api-key: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - firstName
+      - lastName
+    details_format: "user: {{.firstName}} {{.lastName}}"
+    requires_secret: false
+
+  sentry:
+    name: Sentry
+    method: GET
+    url: https://sentry.io/api/0/
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  shodan:
+    name: Shodan
+    method: GET
+    url: https://api.shodan.io/api-info?key={{.Key}}
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  shopify:
+    name: Shopify
+    method: GET
+    url: https://{{.Shop}}.myshopify.com/admin/api/2024-01/shop.json
+    headers:
+      X-Shopify-Access-Token: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - shop.name
+      - shop.email
+    details_format: "shop: {{.shop.name}}"
+    requires_secret: false
+
+  slack:
+    name: Slack
+    method: POST
+    url: https://slack.com/api/auth.test
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - ok
+      - user
+      - team
+    success_field: ok
+    details_format: "user: {{.user}}"
+    error_field: error
+    requires_secret: false
+
+  snyk:
+    name: Snyk
+    method: GET
+    url: https://api.snyk.io/rest/self?version=2024-10-15
+    headers:
+      Authorization: "token {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.attributes.username
+      - data.attributes.email
+    details_format: "user: {{.data.attributes.username}}"
+    requires_secret: false
+
+  sonarcloud:
+    name: SonarCloud
+    method: GET
+    url: https://sonarcloud.io/api/authentication/validate
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - valid
+    requires_secret: false
+
+  square:
+    name: Square
+    method: GET
+    url: https://connect.squareup.com/v2/locations
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      Square-Version: "2024-10-17"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  stripe:
+    name: Stripe
+    method: GET
+    url: https://api.stripe.com/v1/balance
+    auth_type: basic
+    auth_user: "{{.Key}}"
+    auth_pass: ""
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  telegram:
+    name: Telegram
+    method: GET
+    url: https://api.telegram.org/bot{{.Key}}/getMe
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - result.username
+      - result.first_name
+    success_field: ok
+    details_format: "bot: {{.result.username}}"
+    requires_secret: false
+
+  telnyx:
+    name: Telnyx
+    method: GET
+    url: https://api.telnyx.com/v2/phone_numbers
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  terraform:
+    name: Terraform
+    method: GET
+    url: https://app.terraform.io/api/v2/account/details
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.attributes.username
+      - data.attributes.email
+    details_format: "user: {{.data.attributes.username}}"
+    requires_secret: false
+
+  trello:
+    name: Trello
+    method: GET
+    url: https://api.trello.com/1/members/me?key={{.Key}}&token={{.Token}}
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - username
+      - fullName
+    details_format: "user: {{.username}}"
+    requires_secret: true
+    secret_name: token
+
+  twilio:
+    name: Twilio
+    method: GET
+    auth_type: basic
+    auth_user: "{{.Key}}"
+    auth_pass: "{{.Secret}}"
+    url: https://api.twilio.com/2010-04-01/Accounts.json
+    headers:
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: true
+    secret_name: secret
+
+  twitter:
+    name: Twitter
+    method: GET
+    url: https://api.twitter.com/2/users/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.username
+      - data.name
+    details_format: "user: {{.data.username}}"
+    requires_secret: false
+
+  typeform:
+    name: Typeform
+    method: GET
+    url: https://api.typeform.com/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - alias
+    details_format: "user: {{.alias}}"
+    requires_secret: false
+
+  yousign:
+    name: Yousign
+    method: GET
+    url: https://api.yousign.com/v3/workspaces
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  zendesk:
+    name: Zendesk
+    method: GET
+    url: https://{{.Subdomain}}.zendesk.com/api/v2/users/me.json
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - user.name
+      - user.email
+    details_format: "user: {{.user.name}}"
+    requires_secret: false
+
+  airtable:
+    name: Airtable
+    method: GET
+    url: https://api.airtable.com/v0/meta/whoami
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - id
+    details_format: "user: {{.id}}"
+    requires_secret: false
+
+  asana:
+    name: Asana
+    method: GET
+    url: https://app.asana.com/api/1.0/users/me
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - data.name
+      - data.email
+    details_format: "user: {{.data.name}}"
+    requires_secret: false
+
+  cloudflare:
+    name: Cloudflare
+    method: GET
+    url: https://api.cloudflare.com/client/v4/user/tokens/verify
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - result.status
+    success_field: success
+    requires_secret: false
+
+  datadog:
+    name: Datadog
+    method: GET
+    url: https://api.datadoghq.com/api/v1/validate
+    headers:
+      DD-API-KEY: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - valid
+    requires_secret: false
+
+  discord:
+    name: Discord
+    method: GET
+    url: https://discord.com/api/v10/users/@me
+    headers:
+      Authorization: "Bot {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - username
+      - id
+    details_format: "bot: {{.username}}"
+    requires_secret: false
+
+  figma:
+    name: Figma
+    method: GET
+    url: https://api.figma.com/v1/me
+    headers:
+      X-Figma-Token: "{{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - handle
+    details_format: "user: {{.handle}}"
+    requires_secret: false
+
+  grafana:
+    name: Grafana
+    method: GET
+    url: https://{{.Instance}}.grafana.net/api/org
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - name
+    details_format: "org: {{.name}}"
+    requires_secret: false
+
+  heroku:
+    name: Heroku
+    method: GET
+    url: https://api.heroku.com/account
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      Accept: "application/vnd.heroku+json; version=3"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - name
+    details_format: "user: {{.email}}"
+    requires_secret: false
+
+  linear:
+    name: Linear
+    method: POST
+    url: https://api.linear.app/graphql
+    headers:
+      Authorization: "{{.Key}}"
+      Content-Type: "application/json"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    requires_secret: false
+
+  pagerduty:
+    name: PagerDuty
+    method: GET
+    url: https://api.pagerduty.com/users/me
+    headers:
+      Authorization: "Token token={{.Key}}"
+      Accept: "application/vnd.pagerduty+json;version=2"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - user.name
+      - user.email
+    details_format: "user: {{.user.name}}"
+    requires_secret: false
+
+  salesforce:
+    name: Salesforce
+    method: GET
+    url: https://{{.Instance}}.salesforce.com/services/oauth2/userinfo
+    headers:
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    response_type: json
+    response_fields:
+      - email
+      - name
+    details_format: "user: {{.name}}"
+    requires_secret: false
+
+  supabase:
+    name: Supabase
+    method: GET
+    url: https://{{.ProjectRef}}.supabase.co/rest/v1/
+    headers:
+      apikey: "{{.Key}}"
+      Authorization: "Bearer {{.Key}}"
+      User-Agent: "{{.UserAgent}}"
+    success_status: 200
+    requires_secret: false
