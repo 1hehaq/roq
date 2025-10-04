@@ -145,7 +145,7 @@ func displayHelp() {
 	fmt.Println()
 	fmt.Println(successStyle.Render(" example:"))
 	fmt.Printf("    %s -s %s -k %s\n", cmdStyle.Render("roq"), argStyle.Render("github"), argStyle.Render("ghp_xxxxxxxxxxxx"))
-	fmt.Printf("    %s -s %s -json\n\n", cmdStyle.Render("roq"), argStyle.Render("apache"))
+	fmt.Printf("    %s -s %s -json\n\n", cmdStyle.Render("roq"), argStyle.Render("trello"))
 	
 	fmt.Println(successStyle.Render(" options:"))
 	fmt.Printf("    %s      service type %s\n", flagStyle.Render("-s"), requiredStyle.Render("(required)"))

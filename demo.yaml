@@ -1,0 +1,16 @@
+services:
+  github:
+    name: GitHub
+    method: GET                         # HTTP method (GET, POST, etc.)
+    url: https://api.github.com/user    # API endpoint
+    headers:
+      Authorization: "token {{.Key}}"   # {{.Key}} is replaced with the API key
+      User-Agent: "{{.UserAgent}}"      # user agent string
+    success_status: 200                 # expected HTTP status for success
+    response_type: json                 # response format (json, xml, etc.)
+    response_fields:                    # fields to extract from response
+      - login
+      - name
+    details_format: "user: {{.login}}"  # format for displaying details
+    error_field: message                # field containing error message
+    requires_secret: false              # whether additional secret is needed
