@@ -149,7 +149,7 @@ services:
 
 <br>
 
-**Advanced Options:**
+**More Options:**
 - <sub>**Basic Auth**: Use `auth_type: basic`, `auth_user`, and `auth_pass`</sub>
 - <sub>**Multiple Secrets**: Set `requires_secret: true` and `secret_name`</sub>
 - <sub>**Dynamic URLs**: Use placeholders like `{{.Domain}}` or `{{.Instance}}`</sub>
@@ -162,57 +162,11 @@ services:
 <br>
 <br>
 
-<h4>Supported Services</h4>
-
-<details>
-<summary><strong>Click to expand (76 services)</strong></summary>
-
-<br>
-
-**Cloud & Infrastructure**
-- AWS, DigitalOcean, GoogleCloud, Heroku, Terraform, Cloudflare, MongoDB, Supabase
-
-**Development & CI/CD**
-- GitHub, GitLab, Bitbucket, CircleCI, Buildkite, JFrog, NPM
-
-**Communication**
-- Slack, Discord, Telegram, Twilio, Telnyx
-
-**Payment & Commerce**
-- Stripe, PayPal, Paystack, Razorpay, Square, Shopify
-
-**Marketing & CRM**
-- HubSpot, Mailchimp, SendGrid, Mailgun, MailerLite, SendinBlue, Klaviyo, Omnisend, GetResponse
-
-**Project Management**
-- Jira, Trello, Asana, Linear, PagerDuty
-
-**Analytics & Monitoring**
-- Datadog, Sentry, PostHog, Grafana, Honeycomb, SonarCloud
-
-**AI & ML**
-- OpenAI, HuggingFace, NVIDIA
-
-**Design & Collaboration**
-- Figma, Notion, Airtable, Typeform
-
-**Security & DevOps**
-- Snyk, OpsGenie, LaunchDarkly, Doppler
-
-**Other Services**
-- Algolia, Bitly, Clerk, Eventbrite, Postman, Pulumi, Pushbullet, RabbitMQ, Salesforce, Shodan, Yousign, Zendesk
-
-</details>
-
-<br>
-<br>
-
 - **If you see errors or invalid results**
   - <sub> **verify your API key format** </sub>
   - <sub> **check your internet connection** </sub>
   - <sub> **some services require additional parameters (domain, instance, etc.)** </sub>
   - <sub> **use `-v` for verbose output** </sub>
-  - <sub> **use `-h` for guidance** </sub>
 
 <br>
 <br>
