@@ -25,7 +25,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+
 const version = "1.0.0"
+
 
 //go:embed services.yaml
 var servicesYAML embed.FS
