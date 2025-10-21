@@ -17,11 +17,15 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"github.com/blang/semver"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
 	"github.com/corpix/uarand"
+	"github.com/rhysd/go-github-selfupdate/selfupdate"
 	"gopkg.in/yaml.v3"
 )
+
+const version = "1.0.0"
 
 //go:embed services.yaml
 var servicesYAML embed.FS
@@ -89,12 +93,17 @@ func loadServicesConfig() {
 }
 
 func main() {
-	service, key, secret, jsonOutput, listServices, showHelp, verbose := parseFlags()
-	if verbose {
-		log.SetLevel(log.DebugLevel)
-	}
+	service, key, secret, jsonOutput, listServices, showHelp, showVersion, doUpdate := parseFlags()
 	if showHelp {
 		displayHelp()
+		return
+	}
+	if showVersion {
+		displayVersion()
+		return
+	}
+	if doUpdate {
+		performUpdate()
 		return
 	}
 	if listServices {
@@ -113,27 +122,34 @@ func main() {
 	}
 }
 
-func parseFlags() (string, string, string, bool, bool, bool, bool) {
+func parseFlags() (string, string, string, bool, bool, bool, bool, bool) {
 	service := flag.String("s", "", "service type")
 	key := flag.String("k", "", "api key")
 	secret := flag.String("secret", "", "secret key")
 	jsonOutput := flag.Bool("json", false, "json output")
 	listServices := flag.Bool("list", false, "list services")
 	showHelp := flag.Bool("h", false, "help")
-	verbose := flag.Bool("v", false, "verbose")
+	showVersion := flag.Bool("version", false, "show version")
+	doUpdate := flag.Bool("update", false, "update to latest version")
 	flag.Parse()
 
 	if *showHelp {
-		return "", "", "", false, false, true, false
+		return "", "", "", false, false, true, false, false
+	}
+	if *showVersion {
+		return "", "", "", false, false, false, true, false
+	}
+	if *doUpdate {
+		return "", "", "", false, false, false, false, true
 	}
 	if *listServices {
-		return "", "", "", false, true, false, false
+		return "", "", "", false, true, false, false, false
 	}
 	if *service == "" || *key == "" {
 		displayHelp()
 		os.Exit(0)
 	}
-	return *service, *key, *secret, *jsonOutput, false, false, *verbose
+	return *service, *key, *secret, *jsonOutput, false, false, false, false
 }
 
 func displayHelp() {
@@ -148,15 +164,77 @@ func displayHelp() {
 	fmt.Printf("    %s -s %s -json\n\n", cmdStyle.Render("roq"), argStyle.Render("trello"))
 	
 	fmt.Println(successStyle.Render(" options:"))
-	fmt.Printf("    %s      service type %s\n", flagStyle.Render("-s"), requiredStyle.Render("(required)"))
-	fmt.Printf("    %s      api key to verify %s\n", flagStyle.Render("-k"), requiredStyle.Render("(required)"))
-	fmt.Printf("    %s   secret key %s\n", flagStyle.Render("-secret"), argStyle.Render("(required for aws)"))
-	fmt.Printf("    %s   output in json format\n", flagStyle.Render("-json"))
-	fmt.Printf("    %s   list all supported services\n", flagStyle.Render("-list"))
-	fmt.Printf("    %s      verbose output\n", flagStyle.Render("-v"))
-	fmt.Printf("    %s      show this help message\n\n", flagStyle.Render("-h"))
+	fmt.Printf("    %s       service type %s\n", flagStyle.Render("-s"), requiredStyle.Render("(required)"))
+	fmt.Printf("    %s       api key to verify %s\n", flagStyle.Render("-k"), requiredStyle.Render("(required)"))
+	fmt.Printf("    %s  secret key %s\n", flagStyle.Render("-secret"), argStyle.Render("(required for aws)"))
+	fmt.Printf("    %s    output in json format\n", flagStyle.Render("-json"))
+	fmt.Printf("    %s    list all supported services\n", flagStyle.Render("-list"))
+	fmt.Printf("    %s show version\n", flagStyle.Render("-version"))
+	fmt.Printf("    %s  update to latest version\n", flagStyle.Render("-update"))
+	fmt.Printf("    %s       show this help message\n\n", flagStyle.Render("-h"))
 	
 	fmt.Println(argStyle.Render("use responsibly and only on authorized targets!"))
+	fmt.Println()
+}
+
+func displayVersion() {
+	fmt.Println()
+	fmt.Printf("%s %s\n", highlightStyle.Render("roq"), dimStyle.Render("v"+version))
+	fmt.Println()
+}
+
+func performUpdate() {
+	fmt.Println()
+	fmt.Println(highlightStyle.Render("checking for updates..."))
+	
+	latest, found, err := selfupdate.DetectLatest("1hehaq/roq")
+	if err != nil {
+		fmt.Printf("%s %s\n", errorStyle.Render("✗"), dimStyle.Render("error checking for updates: "+err.Error()))
+		fmt.Println()
+		os.Exit(1)
+	}
+	
+	if !found {
+		fmt.Printf("%s %s\n", errorStyle.Render("✗"), dimStyle.Render("no releases found"))
+		fmt.Println()
+		os.Exit(1)
+	}
+	
+	currentVersion := "v" + version
+	v, err := semver.ParseTolerant(strings.TrimPrefix(currentVersion, "v"))
+	if err != nil {
+		fmt.Printf("%s %s\n", errorStyle.Render("✗"), dimStyle.Render("invalid version format: "+err.Error()))
+		fmt.Println()
+		os.Exit(1)
+	}
+	
+	if !latest.Version.GT(v) {
+		fmt.Printf("%s %s\n", successStyle.Render("✓"), dimStyle.Render("already up to date ("+currentVersion+")"))
+		fmt.Println()
+		return
+	}
+	
+	exe, err := os.Executable()
+	if err != nil {
+		fmt.Printf("%s %s\n", errorStyle.Render("✗"), dimStyle.Render("could not locate executable: "+err.Error()))
+		fmt.Println()
+		os.Exit(1)
+	}
+	
+	fmt.Printf("  %s → %s\n", dimStyle.Render(currentVersion), highlightStyle.Render(latest.Version.String()))
+	fmt.Println()
+	fmt.Print(dimStyle.Render("  updating... "))
+	
+	if err := selfupdate.UpdateTo(latest.AssetURL, exe); err != nil {
+		fmt.Printf("%s\n", errorStyle.Render("failed"))
+		fmt.Printf("  %s\n", dimStyle.Render("error: "+err.Error()))
+		fmt.Println()
+		os.Exit(1)
+	}
+	
+	fmt.Printf("%s\n", successStyle.Render("done"))
+	fmt.Println()
+	fmt.Println(dimStyle.Render("  restart roq to use the new version"))
 	fmt.Println()
 }
 
